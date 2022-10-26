@@ -29,6 +29,11 @@ public class CommandLineParser
 
     public void Parse(string[] args)
     {
+        if (args.Length < Arguments.Count)
+        {
+            throw new CommandLineException("Too few arguments");
+        }
+
         var i = 0;
 
         foreach (var arg in Arguments)
