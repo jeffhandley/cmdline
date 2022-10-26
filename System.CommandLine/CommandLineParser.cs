@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+
 namespace System.CommandLine;
 
 public class CommandLineParser
