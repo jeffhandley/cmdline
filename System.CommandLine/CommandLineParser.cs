@@ -109,8 +109,9 @@ public class CommandLineParser
 
             object parseResult = nextToken switch
             {
-                ['-', char shortName] => ParseShortNameOption(shortName),
                 ['-', '-', .. ReadOnlySpan<char> name] => ParseNameOption(name.ToString()),
+                ['-', char shortName] => ParseShortNameOption(shortName),
+                ['-', .. ReadOnlySpan<char> shortNames] => ParseBundledOptions(shortNames.ToArray()),
                 ReadOnlySpan<char> arg => ParseArgument(arg.ToString()),
             };
 
@@ -118,7 +119,32 @@ public class CommandLineParser
             {
                 throw new CommandLineException($"Unhandled error processing argument: {nextToken}");
             }
-            
+
+            OptionBase[] ParseNameOption(string name)
+            {
+                foreach (var opt in Options)
+                {
+                    if (opt.Names.Contains(name))
+                    {
+                        return new[] { ParseOption(opt) };
+                    }
+                }
+
+                throw new CommandLineException($"Invalid option: {name}");
+            }
+
+            OptionBase[] ParseBundledOptions(char[] shortNames)
+            {
+                List<OptionBase> options = new();
+
+                foreach (char shortName in shortNames)
+                {
+                    options.Add(ParseShortNameOption(shortName));
+                }
+
+                return options.ToArray();
+            }
+
             OptionBase ParseShortNameOption(char shortName)
             {
                 foreach (var opt in Options)
@@ -130,19 +156,6 @@ public class CommandLineParser
                 }
 
                 throw new CommandLineException($"Invalid option: {shortName}");
-            }
-
-            OptionBase ParseNameOption(string name)
-            {
-                foreach (var opt in Options)
-                {
-                    if (opt.Names.Contains(name))
-                    {
-                        return ParseOption(opt);
-                    }
-                }
-
-                throw new CommandLineException($"Invalid option: {name}");
             }
 
             OptionBase ParseOption(OptionBase opt)
