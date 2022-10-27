@@ -9,12 +9,12 @@ public class CommandLineParser
     private List<ArgumentBase> Arguments { get; set; } = new();
     private List<OptionBase> Options { get; set; } = new();
 
-    public CommandLineParser(string description)
+    public CommandLineParser(string? description = null)
     {
         Description = description;
     }
 
-    public Argument AddArgument(string name, char? shortName = null)
+    public Argument AddArgument(string? name = null, char? shortName = null)
     {
         var arg = new Argument(name, shortName);
         Arguments.Add(arg);
@@ -38,7 +38,7 @@ public class CommandLineParser
         return opt;
     }
 
-    public EnumOption<T> AddEnumOption<T>(string name, char? shortName) where T : Enum
+    public EnumOption<T> AddEnumOption<T>(string name, char? shortName) where T : struct, Enum
     {
         var opt = new EnumOption<T>(name, shortName);
         Options.Add(opt);

@@ -41,7 +41,7 @@ public class Option<T> : OptionBase where T : IParsable<T>
     }
 }
 
-public class EnumOption<T> : OptionBase where T : Enum
+public class EnumOption<T> : OptionBase where T : struct, Enum
 {
     public T? Value { get; set; }
 
@@ -49,6 +49,6 @@ public class EnumOption<T> : OptionBase where T : Enum
 
     public override void Parse(string arg)
     {
-        Value = (T)Enum.Parse(typeof(T), arg);
+        Value = Enum.Parse<T>(arg, true);
     }
 }

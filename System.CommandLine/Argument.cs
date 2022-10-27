@@ -4,10 +4,10 @@ namespace System.CommandLine;
 
 public abstract class ArgumentBase
 {
-    public string Name { get; set; }
+    public string? Name { get; set; }
     public char? ShortName { get; set; }
 
-    internal ArgumentBase(string name, char? shortName)
+    internal ArgumentBase(string? name, char? shortName)
     {
         Name = name;
         ShortName = shortName;
@@ -18,25 +18,50 @@ public abstract class ArgumentBase
 
 public class Argument : ArgumentBase
 {
-    public string Value { get; set; } = string.Empty;
+    private string? _value;
+    public Argument(string? name, char? shortName) : base(name, shortName) { }
 
-    public Argument(string name, char? shortName) : base(name, shortName) { }
+    public string Value
+    {
+        get
+        {
+            if (_value is null)
+            {
+                throw new InvalidOperationException("Cannot read Value until Parse is called");
+            }
 
+            return _value;
+        }
+    }
+
+    [MemberNotNull(nameof(_value))]
     public override void Parse(string arg)
     {
-        Value = arg;
+        _value = arg;
     }
 }
 
 public class Argument<T> : ArgumentBase where T : IParsable<T>
 {
-    public Argument(string name, char? shortName) : base(name, shortName) { }
+    private T? _value;
+    public Argument(string? name, char? shortName) : base(name, shortName) { }
 
-    public T? Value { get; set; }
+    public T Value
+    {
+        get
+        {
+            if (_value is null)
+            {
+                throw new InvalidOperationException("Cannot read Value until Parse is called");
+            }
 
-    [MemberNotNull("Value")]
+            return _value;
+        }
+    }
+
+    [MemberNotNull(nameof(_value))]
     public override void Parse(string arg)
     {
-        Value = T.Parse(arg, null);
+        _value = T.Parse(arg, null);
     }
 }
