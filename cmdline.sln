@@ -9,6 +9,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "cmdline-2", "2\cmdline-2.cs
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "System.CommandLine", "System.CommandLine\System.CommandLine.csproj", "{BEDE768B-2ADE-4FCD-B61B-DC71BA86F214}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "cmdline-3", "cmdline-3\cmdline-3.csproj", "{58AE9086-AB61-4207-B7C9-2AB202FC3600}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,6 +29,10 @@ Global
 		{BEDE768B-2ADE-4FCD-B61B-DC71BA86F214}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{BEDE768B-2ADE-4FCD-B61B-DC71BA86F214}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{BEDE768B-2ADE-4FCD-B61B-DC71BA86F214}.Release|Any CPU.Build.0 = Release|Any CPU
+		{58AE9086-AB61-4207-B7C9-2AB202FC3600}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{58AE9086-AB61-4207-B7C9-2AB202FC3600}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{58AE9086-AB61-4207-B7C9-2AB202FC3600}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{58AE9086-AB61-4207-B7C9-2AB202FC3600}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
