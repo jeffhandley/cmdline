@@ -4,13 +4,13 @@ namespace System.CommandLine;
 
 public abstract class ArgumentBase
 {
-    public string? Name { get; set; }
-    public char? ShortName { get; set; }
+    public string[] Names { get; set; }
+    public char[] ShortNames { get; set; }
 
-    internal ArgumentBase(string? name, char? shortName)
+    internal ArgumentBase(string[] names, char[] shortNames)
     {
-        Name = name;
-        ShortName = shortName;
+        Names = names;
+        ShortNames = shortNames;
     }
 
     public abstract void Parse(string arg);
@@ -19,7 +19,7 @@ public abstract class ArgumentBase
 public class Argument : ArgumentBase
 {
     private string? _value;
-    public Argument(string? name, char? shortName) : base(name, shortName) { }
+    public Argument(string[] names, char[] shortNames) : base(names, shortNames) { }
 
     public string Value
     {
@@ -27,7 +27,7 @@ public class Argument : ArgumentBase
         {
             if (_value is null)
             {
-                throw new InvalidOperationException("Cannot read Value until Parse is called");
+                throw new InvalidOperationException("Cannot get Value until Parse is called");
             }
 
             return _value;
@@ -44,7 +44,7 @@ public class Argument : ArgumentBase
 public class Argument<T> : ArgumentBase where T : IParsable<T>
 {
     private T? _value;
-    public Argument(string? name, char? shortName) : base(name, shortName) { }
+    public Argument(string[] names, char[] shortNames) : base(names, shortNames) { }
 
     public T Value
     {
@@ -52,7 +52,7 @@ public class Argument<T> : ArgumentBase where T : IParsable<T>
         {
             if (_value is null)
             {
-                throw new InvalidOperationException("Cannot read Value until Parse is called");
+                throw new InvalidOperationException("Cannot get Value until Parse is called");
             }
 
             return _value;

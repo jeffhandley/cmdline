@@ -4,48 +4,66 @@ namespace System.CommandLine;
 
 public abstract class OptionBase
 {
-    public string? Name { get; set; }
-    public char? ShortName { get; set; }
+    public string[] Names { get; set; }
+    public char[] ShortNames { get; set; }
 
-    internal OptionBase(string name, char? shortName)
+    internal OptionBase(string[] names, char[] shortNames)
     {
-        Name = name;
-        ShortName = shortName;
+        Names = names;
+        ShortNames = shortNames;
     }
+}
+
+public abstract class ParsedOption : OptionBase
+{
+    internal ParsedOption(string[] names, char[] shortNames) : base(names, shortNames) { }
 
     public abstract void Parse(string arg);
 }
 
 public class Option : OptionBase
 {
-    public string Value { get; set; } = string.Empty;
+    internal Option(string[] names, char[] shortNames) : base(names, shortNames) { }
 
-    public Option(string name, char? shortName = null) : base(name, shortName) { }
+    public bool Value { get; private set; }
 
-    public override void Parse(string arg)
+    public void IsPresent()
     {
-        Value = arg;
+        Value = true;
     }
 }
 
-public class Option<T> : OptionBase where T : IParsable<T>
+public class Option<T> : ParsedOption where T : IParsable<T>
 {
-    public Option(string name, char? shortName) : base(name, shortName) { }
+    private T? _value;
 
-    public T? Value { get; set; }
+    internal Option(string[] names, char[] shortNames) : base(names, shortNames) { }
 
-    [MemberNotNull("Value")]
+    public T Value
+    {
+        get
+        {
+            if (_value is null)
+            {
+                throw new InvalidOperationException("Cannot get Value until Parse is called");
+            }
+
+            return _value;
+        }
+    }
+
+    [MemberNotNull(nameof(_value))]
     public override void Parse(string arg)
     {
-        Value = T.Parse(arg, null);
+        _value = T.Parse(arg, null);
     }
 }
 
-public class EnumOption<T> : OptionBase where T : struct, Enum
+public class EnumOption<T> : ParsedOption where T : struct, Enum
 {
     public T? Value { get; set; }
 
-    public EnumOption(string name, char? shortName) : base(name, shortName) { }
+    internal EnumOption(string[] names, char[] shortNames) : base(names, shortNames) { }
 
     public override void Parse(string arg)
     {

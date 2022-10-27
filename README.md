@@ -33,6 +33,16 @@ This scenario combines the concepts of arguments and options.
 1. It has an Enum-based option and a numeric argument, both of which are non-nullable/required
 2. The option supports both a `--` long name and a `-` single-character alias
 
+### cmdline-4
+
+This scenario demonstrates a couple additional concepts:
+
+1. Boolean options, each of which having at least a name and a short name
+2. Name and short name aliases, simply by having arrays of names and shortnames
+	- We'd allow _configuration_ of which name is the primary name (via a property)
+	- But we'd also recognize the _convention_ that the first element in the array is the primary name by default
+3. This program's "command" uses async code, and the top-level statements template still supports this easily
+
 ## Notes
 
 These illustrations were crafted up with deliberate ignorance of today's System.CommandLine APIs. This approach aimed to have the perspective of which concepts were needed as opposed to which APIs could be used to get close to what was conceptualized.
